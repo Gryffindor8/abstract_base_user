@@ -6,4 +6,3 @@ db.sqlite3
 **/__pycache__/
 .idea/misc.xml
 .idea/**
-.idea/*
