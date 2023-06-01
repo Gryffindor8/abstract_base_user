@@ -1,4 +1,7 @@
 user_env/
 .env
 .idea/
-.idea
+**/migrations/
+db.sqlite3
+**/__pycache__/
+.idea/misc.xml
