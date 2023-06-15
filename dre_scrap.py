@@ -8,18 +8,24 @@ import json
 
 def get_data(soup_obj, tags):
     try:
-        obj = soup_obj.find(lambda t: t.name == 'td' and tags in t.text).parent.text
+        obj = soup_obj.find(lambda t: t.name == 'td' and tags in t.text).parent
+        if tags == "Mailing Address:":
+            obj = str(obj).replace("<br/>", " #N ")
+            obj1 = BeautifulSoup(obj, "html.parser")
+            return obj1.text
+        return obj.text
+
     except:
         obj = ''
     return obj
 
 
-urls = ["https://www2.dre.ca.gov/publicasp/pplinfo.asp?License_id=02004494",
-        "https://www2.dre.ca.gov/publicasp/pplinfo.asp?License_id=02136186",
-        "https://www2.dre.ca.gov/publicasp/pplinfo.asp?License_id=01145744",
-        "https://www2.dre.ca.gov/publicasp/pplinfo.asp?License_id=02112275",
-        "https://www2.dre.ca.gov/publicasp/pplinfo.asp?License_id=01942167",
-        "https://www2.dre.ca.gov/publicasp/pplinfo.asp?License_id=02113403"]
+urls = ["https://www2.dre.ca.gov/publicasp/pplinfo.asp?License_id=01759756",
+        "https://www2.dre.ca.gov/publicasp/pplinfo.asp?License_id=02124511",
+        "https://www2.dre.ca.gov/publicasp/pplinfo.asp?License_id=02186081",
+        "https://www2.dre.ca.gov/publicasp/pplinfo.asp?License_id=02132541"]
+# urls = urls.split()
+# urls = urls[1500:2000]
 all_data = []
 retry = 0
 failed = []
@@ -58,12 +64,13 @@ for num, url in enumerate(urls):
             all_data.append(data_dict)
             json_object = json.dumps(all_data)
 
-            with open("result2.json", "w") as outfile:
+            with open("result.json", "w") as outfile:
                 outfile.write(json_object)
             print(num)
             retry = 0
             break
-        except:
+        except Exception as e:
+            print(e)
             retry = retry + 1
             if retry == 4:
                 retry = 0
@@ -73,5 +80,4 @@ for num, url in enumerate(urls):
                 json_object1 = json.dumps(fl)
                 with open("failed.json", "w") as outfile:
                     outfile.write(json_object1)
-
                 break

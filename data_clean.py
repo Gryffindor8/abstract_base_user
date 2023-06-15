@@ -1,19 +1,23 @@
 import json
 
-f = open("result.json", 'r')
+f = open("result2.json", 'r')
 datas = json.load(f)
 
 for count1, data in enumerate(datas):
     address = data.get("address", '')
     if address.strip():
-        address_split = address.split(",")
-        main_address = address_split[0]
-        ad = (address_split[1].strip().split())
-        state = (ad[0])
-        postal = (ad[1])
-        data["postal"] = postal
-        data["state"] = state
-        data["address"] = main_address
+        address_split = address.split("#N")
+        address_split = [k for k in address_split if k.strip()]
+        # data["address"] = address_split
+        for count2, addr in enumerate(address_split):
+            key = "address_" + str(count2 + 1)
+            data[key] = addr
+        # main_address = address_split[0]
+        # ad = (address_split[1].strip().split())
+        # state = (ad[0])
+        # postal = (ad[1])
+        # data["postal"] = postal
+        # data["state"] = state
 
     for count, brok in enumerate(data.get("brokers", [])):
         if not brok.strip():
